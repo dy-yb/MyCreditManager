@@ -33,6 +33,9 @@ func menu() {
       case .editOrAddGrade:
         addGrade()
 
+      case .deleteGrade:
+        deleteGrade()
+
       case .exit:
         isExited = true
 
@@ -111,7 +114,6 @@ func addGrade() {
      gradeSample.contains(where: { $0 == String(gradeData.split(separator: " ").last ?? "") }){
 
     let dataArray = gradeData.split(separator: " ")
-    print( dataArray)
 
     let studentName = String(dataArray[0])
     let subjectName = String(dataArray[1])
@@ -143,6 +145,43 @@ func addGrade() {
     // 입력 값이 없거나, 스페이스 바로 구분 된 입력 값이 3가지 항목이 아니거나, 입력된 성적이 올바른 형태가 아닌경우
     print("입력이 잘못되었습니다. 다시 확인해주세요.")
   }
+}
+
+func deleteGrade() {
+  print("성적을 삭제할 학생의 이름, 과목 이름을 띄어쓰기로 구분하여 차례로 작성해주세요.")
+
+  let gradeInput = readLine()
+
+  // 입력 값이 비어있지 않고, 스페이스(" ")로 구분된 2개의 값이 존재하는지 판별
+  if let gradeData = gradeInput,
+     gradeData.split(separator: " ").count == 2 {
+
+    let dataArray = gradeData.split(separator: " ")
+
+    let studentName = String(dataArray[0])
+    let subjectName = String(dataArray[1])
+
+    // 이름으로 학생 정보 탐색하여 인덱스 파악
+    if let studentIndex = studentData.firstIndex(where: { $0.name == studentName }) {
+      let studentGradeData = studentData[studentIndex].gradeData
+
+      // 입력한 과목에 대한 성적이 있다면 삭제
+      if let gradeIndex = studentGradeData.firstIndex(where: { $0.subjectName == subjectName }) {
+        studentData[studentIndex].gradeData.remove(at: gradeIndex)
+      } else {
+        // 일치하는 과목이 없는 경우
+        print("\(subjectName) 과목의 성적을 찾지 못했습니다.")
+      }
+
+    } else {
+      // 일치하는 학생의 이름이 없는 경우
+      print("\(studentName) 학생을 찾지 못했습니다.")
+    }
+  } else {
+    // 입력 값이 비어있지 않고, 스페이스(" ")로 구분된 2개의 값이 존재하지 않는 경우
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+  }
+
 }
 
 menu()
