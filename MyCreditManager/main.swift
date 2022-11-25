@@ -7,7 +7,6 @@
 
 import Foundation
 
-let gradeSample: [String] = ["A+", "A", "B+", "B", "C", "C+", "D", "D+", "F"]
 var studentData: [Student] = []
 
 func menu() {
@@ -36,7 +35,10 @@ func menu() {
       case .deleteGrade:
         deleteGrade()
 
-      case .exit:
+      case .showGradeAvarage:
+        showGradeAverage()
+
+      case .exitSmallX, .exitLargeX:
         isExited = true
 
       default:
@@ -46,7 +48,6 @@ func menu() {
     } else {
       print("뭔가 입력이 잘못되었습니다. 1~5사이의 숫자 혹은 X를 입력해주세요.")
     }
-    print(studentData)
   }
 }
 
@@ -111,7 +112,7 @@ func addGrade() {
   // 입력 값이 비어있지 않고, 스페이스(" ")로 구분된 3개의 값이 존재하며, 마지막 성적이 올바른 형태로 입력 되었는지 판별
   if let gradeData = gradeInput,
      gradeData.split(separator: " ").count == 3,
-     gradeSample.contains(where: { $0 == String(gradeData.split(separator: " ").last ?? "") }){
+     gradeSample.keys.contains(where: { $0 == String(gradeData.split(separator: " ").last ?? "") }){
 
     let dataArray = gradeData.split(separator: " ")
 
@@ -181,8 +182,40 @@ func deleteGrade() {
     // 입력 값이 비어있지 않고, 스페이스(" ")로 구분된 2개의 값이 존재하지 않는 경우
     print("입력이 잘못되었습니다. 다시 확인해주세요.")
   }
+}
+
+func showGradeAverage() {
+  print("평점을 알고싶은 학생의 이름을 입력해주세요.")
+
+  var numOfSubjects: Double = 0
+  var totalGrade: Double = 0
+
+  let studentName = readLine()
+
+  if let name = studentName {
+
+    if let studentIndex = studentData.firstIndex(where: { $0.name == studentName }) {
+      let studentGradeData = studentData[studentIndex].gradeData
+
+      // 입력 된 성적이 없는 경우
+      if studentGradeData.count == 0 {
+        print("아직 \(name) 학생의 입력 된 성적이 없습니다.")
+
+      } else {
+        studentGradeData.forEach {
+          print("\($0.subjectName): \($0.grade)")
+
+          totalGrade += gradeSample[$0.grade] ?? 0
+          numOfSubjects += 1
+        }
+        print("평점: \(totalGrade/numOfSubjects)")
+      }
+    }
+
+  } else {
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+  }
 
 }
 
 menu()
-
