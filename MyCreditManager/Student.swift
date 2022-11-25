@@ -12,10 +12,9 @@ struct Student {
   let gradeData: [Grades]?
 }
 
-struct Grades {
+struct Grade {
   let subjectName: String
-  let grade: GradeValue
-  let rawGrade: Double
+  let grade: String
 }
 
 enum GradeValue: Float {

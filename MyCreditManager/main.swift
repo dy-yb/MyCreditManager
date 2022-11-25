@@ -29,6 +29,9 @@ func menu() {
       case .deleteStudent:
         deleteStudent()
 
+      case .editOrAddGrade:
+        addGrade()
+
       case .exit:
         isExited = true
 
@@ -91,6 +94,40 @@ func deleteStudent() {
     print("입력이 잘못되었습니다. 다시 확인해주세요.")
   }
 
+}
+
+
+func addGrade() {
+  print("성적을 추가할 학생의 이름, 과목 이름, 성적(A+, A, F 등을 띄어쓰기로 구분하여 차례로 작성해주세요.")
+  print("입력 예) Mickey Swift A+ \n 만약에 학생의 성적 중 해당 과목이 존재하면 기존 점수가 갱신됩니다.")
+
+  let gradeInput = readLine()
+
+  if let grade = gradeInput {
+
+    let dataArray = grade.split(separator: " ")
+
+    let isExistedName = studentData.contains { student in
+      student.name == dataArray[0]
+    }
+
+    if isExistedName {
+      studentData.append(
+        Student(
+          name: dataArray[0],
+          gradeData: Grade(
+            subjectName: String(dataArray[1]),
+            grade: String(dataArray[2])
+          )
+        )
+      )
+    } else {
+      print("\(dataArray[0]) 학생을 찾지 못했습니다.")
+    }
+
+  } else {
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+  }
 }
 
 menu()
