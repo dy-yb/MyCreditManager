@@ -43,13 +43,26 @@ func addStudent() {
   let newStudentName = readLine()
 
   if let name = newStudentName {
-    studentData.append(
-      Student(
-        name: name, gradeData: nil
+
+    let isExistedName = studentData.contains { student in
+      student.name == name
+    }
+
+    if !isExistedName {
+      studentData.append(
+        Student(
+          name: name,
+          gradeData: nil
+        )
       )
-    )
+    } else {
+      print("\(name)은 이미 존재하는 학생입니다. 추가하지 않습니다.")
+    }
+
+  } else {
+      print("입력이 잘못되었습니다. 다시 확인해주세요.")
   }
 }
 
-  menu()
-  print(studentData)
+menu()
+print(studentData)
