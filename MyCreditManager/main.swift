@@ -58,6 +58,7 @@ func addStudent() {
 
   if let name = newStudentName {
 
+    // 존재하는 학생인지 판별
     let isExistedName = studentData.contains { student in
       student.name == name
     }
@@ -87,6 +88,7 @@ func deleteStudent() {
 
   if let name = deleteStudentName {
 
+    // 존재하는 학생이면 삭제
     if let studentIndex = studentData.firstIndex(where: { $0.name == name }) {
       studentData.remove(at: studentIndex)
 
@@ -215,7 +217,6 @@ func showGradeAverage() {
   } else {
     print("입력이 잘못되었습니다. 다시 확인해주세요.")
   }
-
 }
 
 menu()
