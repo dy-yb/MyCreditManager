@@ -9,12 +9,12 @@ import Foundation
 
 struct Student {
   let name: String
-  let gradeData: [Grades]?
+  var gradeData: [Grade]
 }
 
 struct Grade {
   let subjectName: String
-  let grade: String
+  var grade: String
 }
 
 enum GradeValue: Float {

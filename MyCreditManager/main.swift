@@ -7,6 +7,7 @@
 
 import Foundation
 
+let gradeSample: [String] = ["A+", "A", "B+", "B", "C", "C+", "D", "D+", "F"]
 var studentData: [Student] = []
 
 func menu() {
@@ -42,6 +43,7 @@ func menu() {
     } else {
       print("뭔가 입력이 잘못되었습니다. 1~5사이의 숫자 혹은 X를 입력해주세요.")
     }
+    print(studentData)
   }
 }
 
@@ -60,7 +62,7 @@ func addStudent() {
       studentData.append(
         Student(
           name: name,
-          gradeData: nil
+          gradeData: []
         )
       )
       print("\(name) 학생을 추가했습니다.")
@@ -70,7 +72,7 @@ func addStudent() {
     }
 
   } else {
-      print("입력이 잘못되었습니다. 다시 확인해주세요.")
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
   }
 }
 
@@ -98,37 +100,50 @@ func deleteStudent() {
 
 
 func addGrade() {
-  print("성적을 추가할 학생의 이름, 과목 이름, 성적(A+, A, F 등을 띄어쓰기로 구분하여 차례로 작성해주세요.")
+  print("성적을 추가할 학생의 이름, 과목 이름, 성적(A+, A, F 등)을 띄어쓰기로 구분하여 차례로 작성해주세요.")
   print("입력 예) Mickey Swift A+ \n 만약에 학생의 성적 중 해당 과목이 존재하면 기존 점수가 갱신됩니다.")
 
   let gradeInput = readLine()
 
-  if let grade = gradeInput {
+  // 입력 값이 비어있지 않고, 스페이스(" ")로 구분된 3개의 값이 존재하며, 마지막 성적이 올바른 형태로 입력 되었는지 판별
+  if let gradeData = gradeInput,
+     gradeData.split(separator: " ").count == 3,
+     gradeSample.contains(where: { $0 == String(gradeData.split(separator: " ").last ?? "") }){
 
-    let dataArray = grade.split(separator: " ")
+    let dataArray = gradeData.split(separator: " ")
+    print( dataArray)
 
-    let isExistedName = studentData.contains { student in
-      student.name == dataArray[0]
-    }
+    let studentName = String(dataArray[0])
+    let subjectName = String(dataArray[1])
+    let grade = String(dataArray[2])
 
-    if isExistedName {
-      studentData.append(
-        Student(
-          name: dataArray[0],
-          gradeData: Grade(
-            subjectName: String(dataArray[1]),
-            grade: String(dataArray[2])
+    // 이름으로 학생 정보 탐색하여 인덱스 파악
+    if let studentIndex = studentData.firstIndex(where: { $0.name == studentName }) {
+      let studentGradeData = studentData[studentIndex].gradeData
+
+      // 해당 과목에 대한 성적이 이미 있다면 수정
+      if let gradeIndex = studentGradeData.firstIndex(where: { $0.subjectName == subjectName }) {
+        studentData[studentIndex].gradeData[gradeIndex].grade = grade
+
+      } else {
+        // 처음 입력 되는 과목이면 추가
+        studentData[studentIndex].gradeData.append(
+          Grade(
+            subjectName: subjectName,
+            grade: grade
           )
         )
-      )
-    } else {
-      print("\(dataArray[0]) 학생을 찾지 못했습니다.")
-    }
+      }
 
+    } else {
+      // 일치하는 학생의 이름이 없는 경우
+      print("\(studentName) 학생을 찾지 못했습니다.")
+    }
   } else {
+    // 입력 값이 없거나, 스페이스 바로 구분 된 입력 값이 3가지 항목이 아니거나, 입력된 성적이 올바른 형태가 아닌경우
     print("입력이 잘못되었습니다. 다시 확인해주세요.")
   }
 }
 
 menu()
-print(studentData)
+
