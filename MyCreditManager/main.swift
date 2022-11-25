@@ -26,6 +26,9 @@ func menu() {
       case .addStudent:
         addStudent()
 
+      case .deleteStudent:
+        deleteStudent()
+
       case .exit:
         isExited = true
 
@@ -33,6 +36,8 @@ func menu() {
         print("뭔가 입력이 잘못되었습니다. 1~5사이의 숫자 혹은 X를 입력해주세요.")
 
       }
+    } else {
+      print("뭔가 입력이 잘못되었습니다. 1~5사이의 숫자 혹은 X를 입력해주세요.")
     }
   }
 }
@@ -55,6 +60,8 @@ func addStudent() {
           gradeData: nil
         )
       )
+      print("\(name) 학생을 추가했습니다.")
+
     } else {
       print("\(name)은 이미 존재하는 학생입니다. 추가하지 않습니다.")
     }
@@ -62,6 +69,28 @@ func addStudent() {
   } else {
       print("입력이 잘못되었습니다. 다시 확인해주세요.")
   }
+}
+
+func deleteStudent() {
+  print("삭제할 학생의 이름을 입력해주세요")
+
+  let deleteStudentName = readLine()
+
+  if let name = deleteStudentName {
+
+    if let studentIndex = studentData.firstIndex(where: { $0.name == name }) {
+      studentData.remove(at: studentIndex)
+
+      print("\(name) 학생을 삭제했습니다.")
+
+    } else {
+      print("\(name) 학생을 찾지 못했습니다.")
+    }
+
+  } else {
+    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+  }
+
 }
 
 menu()
